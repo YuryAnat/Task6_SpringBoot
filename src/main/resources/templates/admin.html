@@ -5,7 +5,7 @@
     <link rel='stylesheet' href='/webjars/bootstrap/4.3.1/css/bootstrap.min.css'>
     <script src="/webjars/jquery/3.3.1/jquery.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
     <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-    <script src="/js/editModal.js" th:src="@{/js/editModal.js}"></script>
+    <script src="/js/admin.js" th:src="@{/js/admin.js}"></script>
 </head>
 <body>
 <nav class="navbar navbar-dark bg-dark">
@@ -48,7 +48,7 @@
             </ul>
             <div class="tab-content" id="tabContent">
                 <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="listUsers">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="user-table">
                         <tr>
                             <th class="col-*">Id</th>
                             <th class="col-*">Login</th>
@@ -57,23 +57,6 @@
                             <th class="col-*">Roles</th>
                             <th class="col-*">Edit</th>
                             <th class="col-*">Delete</th>
-                        </tr>
-                        <tr th:each="user : ${users}">
-                            <td th:text="${user.id}"></td>
-                            <td th:text="${user.login}"></td>
-                            <td th:text="${user.name}"></td>
-                            <td th:text="${user.email}"></td>
-                            <td>
-                                    <span th:each="role : ${user.roles}" th:text="${role.role}+' '"></span>
-                            </td>
-                            <td>
-                                <button class="btn-info btn btn-sm" type="button" data-toggle="modal" data-target="#editUser"
-                                        th:attr="data-target='#editUser', data-id=${user.id}, data-login=${user.login}, data-name=${user.name}, data-email=${user.email}">Edit
-                                </button>
-                            </td>
-                            <td>
-                                <a th:href="@{'/admin/delete?id=' + ${user.id}}" class="btn btn-danger btn-sm">Delete</a>
-                            </td>
                         </tr>
                     </table>
                 </div>
@@ -86,14 +69,14 @@
                         </div>
                         <div class="row justify-content-center">
                             <div class="col-6">
-                                <form method="post" action="/admin/add" class="form-group">
-                                    <label>Login name</label>
+                                <form method="post" class="form-group" id="addFormUser">
+                                    <label>Login</label>
                                     <input class="form-control" name="login" value="" type="text">
                                     <label>Password</label>
                                     <input class="form-control" name="password" value="" type="password">
                                     <label>Confirm password</label>
                                     <input class="form-control" name="confPassword" value="" type="password">
-                                    <label>Nick name</label>
+                                    <label>Name</label>
                                     <input class="form-control" name="name" value="" type="text">
                                     <label>eMail</label>
                                     <input class="form-control" name="email" value="" type="email">
@@ -102,7 +85,7 @@
                                     <input id="roleAdmin" type="checkbox" name="roles" value="ADMIN">ADMIN<br>
                                     <div class="row justify-content-center">
                                         <div class="col-5">
-                                            <button class="btn btn-success" type="submit" name="add">Add new user
+                                            <button class="btn btn-success" type="submit" onclick="addForm()" name="add">Add new user
                                             </button>
                                         </div>
                                     </div>
@@ -114,7 +97,7 @@
                 <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="editUser"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form class="form-group" action="/admin/edit" method="post">
+                        <form class="form-group" action="/rest/admin/edit/" method="post">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5>Edit user</h5>
@@ -123,7 +106,7 @@
                                     <div class="align-items-center align-content-center">
                                         <label class="form-text">Id</label>
                                     </div>
-                                    <input id="id" name="id" value="" type="text"
+                                    <input id="id" name="id" value="" type="text" readonly
                                            class="disabled form-control bg-light">
                                     <label class="form-text">Login name</label>
                                     <input id="login" name="login" value="" type="text" class="form-control">
