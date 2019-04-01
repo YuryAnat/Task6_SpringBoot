@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home page</title>
+    <link rel='stylesheet' href='webjars/bootstrap/4.3.1/css/bootstrap.min.css'>
+    <script src="webjars/jquery/3.3.1/jquery.min.js" th:src="@{webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" th:src="@{webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand text-white">Task5_Spring</a>
+    <form class="form-inline my-2 my-lg-0">
+        <a style="color: white" th:href="@{/logout}">Logout</a>
+    </form>
+</nav>
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/user">
+                            <span data-feather="home"></span>
+                            User <span class="sr-only"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav>
+            <br>
+            User: <span th:text="${user.username}"></span>
+            <br>
+            Role: <span th:each="role : ${roles}" th:text="${role}+' '"></span>
+            <br>
+            Session id: <span th:text="${#httpSession.id}"></span>
+            <br>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
