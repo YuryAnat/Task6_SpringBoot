@@ -17,6 +17,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     private final SessionFactory sessionFactory;
 
+
     @Autowired
     public UserRepositoryImpl(EntityManagerFactory factory) {
         if(factory.unwrap(SessionFactory.class) == null){

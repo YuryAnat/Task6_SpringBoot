@@ -23,7 +23,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/admin">
                             <span data-feather="home"></span>
-                            Admin <span class="sr-only">(current)</span>
+                            Admin <span class="sr-only"></span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -69,24 +69,23 @@
                         </div>
                         <div class="row justify-content-center">
                             <div class="col-6">
-                                <form method="post" class="form-group" id="addFormUser">
+                                <form id="addFormUser" method="get" action="/admin">
                                     <label>Login</label>
-                                    <input class="form-control" name="login" value="" type="text">
+                                    <input id="newLogin" class="form-control" name="login" value="" type="text">
                                     <label>Password</label>
-                                    <input class="form-control" name="password" value="" type="password">
+                                    <input id="newPassword" class="form-control" name="password" value="" type="password">
                                     <label>Confirm password</label>
                                     <input class="form-control" name="confPassword" value="" type="password">
                                     <label>Name</label>
-                                    <input class="form-control" name="name" value="" type="text">
+                                    <input id="newName" class="form-control" name="name" value="" type="text">
                                     <label>eMail</label>
-                                    <input class="form-control" name="email" value="" type="email">
+                                    <input id="newEmail" class="form-control" name="email" value="" type="email">
                                     <label>Role</label>
-                                    <input id="roleUser" type="checkbox" name="roles" value="USER" checked>USER
-                                    <input id="roleAdmin" type="checkbox" name="roles" value="ADMIN">ADMIN<br>
+                                    <input class="roles" id="roleUser" type="checkbox" name="roles" value="USER" checked>USER
+                                    <input class="roles" id="roleAdmin" type="checkbox" name="roles" value="ADMIN">ADMIN<br>
                                     <div class="row justify-content-center">
                                         <div class="col-5">
-                                            <button class="btn btn-success" type="submit" onclick="addForm()" name="add">Add new user
-                                            </button>
+                                            <input class="btn btn-success" type="submit" onclick="addForm()" name="add" value="Add new user">
                                         </div>
                                     </div>
                                 </form>
@@ -97,7 +96,7 @@
                 <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="editUser"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form class="form-group" action="/rest/admin/edit/" method="post">
+                        <form id="editFormUser" class="form-group" action="/admin" method="get">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5>Edit user</h5>
@@ -120,13 +119,13 @@
                                     <input id="email" name="email" value="" type="email" class="form-control">
                                     <label class="form-text">Role</label>
                                     <div class="form-inline">
-                                        <input type="checkbox" name="roles" value="USER" checked>USER
-                                        <input type="checkbox" name="roles" value="ADMIN">ADMIN<br>
+                                        <input class="editRoles" type="checkbox" name="roles" value="USER" checked>USER
+                                        <input class="editRoles" type="checkbox" name="roles" value="ADMIN">ADMIN<br>
                                     </div>
                                     <br>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-success" type="submit" name="edit">Edit user</button>
+                                    <button class="btn btn-success" type="submit" onclick="editForm()" name="edit">Edit user</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>

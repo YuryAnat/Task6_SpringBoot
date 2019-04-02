@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,10 +45,10 @@ public class RestUserController {
         return new ResponseEntity<>("User added", HttpStatus.OK);
     }
 
-    @PostMapping(value = "/rest/admin/delete/{id}")
-    public ResponseEntity<String> restDeleteUserById(@PathVariable("id") int id){
+    @GetMapping(value = "/rest/admin/delete/{id}")
+    public void restDeleteUserById(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
         userService.deleteUser(id);
-        return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        response.sendRedirect("/admin");
     }
 
     @PostMapping(value = "/rest/admin/edit")
