@@ -1,6 +1,5 @@
 package com.yuryanat.task6.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -23,7 +22,7 @@ public class User {
     private String email;
 
 
-    @ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE},fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
@@ -100,7 +99,7 @@ public class User {
         this.email = email;
     }
 
-    public LinkedHashSet<Role> getRoles() {
+    public Set<Role> getRoles() {
         return new LinkedHashSet<>(roles);
     }
 

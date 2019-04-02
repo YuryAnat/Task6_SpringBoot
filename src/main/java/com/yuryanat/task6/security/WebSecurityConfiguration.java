@@ -47,7 +47,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/login").successHandler(successHandler).permitAll().and().logout().logoutSuccessUrl("/").permitAll()
                 .and().exceptionHandling().accessDeniedPage("/403");
         http.authorizeRequests().antMatchers("/rest/admin","/rest/admin/**").permitAll();
-
     }
 }
 

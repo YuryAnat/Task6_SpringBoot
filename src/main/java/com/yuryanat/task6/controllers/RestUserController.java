@@ -4,12 +4,12 @@ import com.yuryanat.task6.models.User;
 import com.yuryanat.task6.services.RoleService;
 import com.yuryanat.task6.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,9 +46,11 @@ public class RestUserController {
     }
 
     @GetMapping(value = "/rest/admin/delete/{id}")
-    public void restDeleteUserById(@PathVariable("id") int id, HttpServletResponse response) throws IOException {
+    public ResponseEntity restDeleteUserById(@PathVariable("id") int id) throws IOException {
         userService.deleteUser(id);
-        response.sendRedirect("/admin");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/admin"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @PostMapping(value = "/rest/admin/edit")

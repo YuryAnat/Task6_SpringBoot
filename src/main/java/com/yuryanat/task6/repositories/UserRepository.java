@@ -6,9 +6,9 @@ import java.util.List;
 
 @Transactional
 public interface UserRepository{
-    boolean addUser(User user);
-    boolean updateUser(User user);
-    boolean deleteUser(int id);
+    void addUser(User user);
+    void updateUser(User user);
+    void deleteUser(int id);
     User getUserById(int id);
     User getUserByName(String name);
     List<User> getAllUsers();

@@ -4,7 +4,6 @@ import com.yuryanat.task6.models.User;
 import com.yuryanat.task6.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

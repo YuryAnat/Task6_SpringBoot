@@ -1,7 +1,6 @@
 package com.yuryanat.task6.services;
 
 import com.yuryanat.task6.models.User;
-
 import java.util.List;
 
 public interface UserService {
