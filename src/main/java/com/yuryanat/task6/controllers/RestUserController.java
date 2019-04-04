@@ -1,4 +1,5 @@
 package com.yuryanat.task6.controllers;
+
 import com.yuryanat.task6.models.Role;
 import com.yuryanat.task6.models.User;
 import com.yuryanat.task6.services.RoleService;
@@ -56,7 +57,7 @@ public class RestUserController {
     @PostMapping(value = "/rest/admin/edit")
     public ResponseEntity<String> restEditUser(@RequestBody User user){
         Set<Role> roles = user.getRoles().stream().map(r -> roleService.findRoleByName(r.getRole())).collect(Collectors.toSet());
-        roles.forEach(r -> r.addUser(user));
+//        roles.forEach(r -> r.addUser(user));
         user.setRoles(roles);
         userService.updateUser(user);
         return new ResponseEntity<>("User edited", HttpStatus.OK);
