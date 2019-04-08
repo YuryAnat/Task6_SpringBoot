@@ -1,8 +1,12 @@
-$(document).on('show.bs.modal','#editUser', function (e) {
+$(document).ready(function () {
+    addAllUser();
+});
+
+$(document).on('show.bs.modal', '#editUser', function (e) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "/rest/admin/"+$(e.relatedTarget).data('id'),
+        url: "/rest/admin/" + $(e.relatedTarget).data('id'),
         dataType: 'json',
         cache: false,
         timeout: 600000,
@@ -15,28 +19,56 @@ $(document).on('show.bs.modal','#editUser', function (e) {
     });
 });
 
-function addForm(){
-    var newUser = JSON.stringify({
-        "login": $("#newLogin").val(),
-        "password": $("#newPassword").val(),
-        "name": $("#newName").val(),
-        "email": $("#newEmail").val(),
-        "roles": $(".roles:checked").map(function () {
-            return $(this).val();
-        }).get()
-    });
-
+function addAllUser() {
     $.ajax({
-        type: "POST",
+        type: "GET",
         contentType: "application/json",
         dataType: "json",
-        url: "/rest/admin/add/",
-        data: newUser,
-        success: function () {top.location.href="/admin"}
+        url: "/rest/admin/",
+        cache: false,
+        timeout: 60000,
+        success: function (data) {
+            var table = "";
+            $.each(data, function (key, value) {
+                table += "<tr>";
+                table += '<td>' + value.id + '</td>';
+                table += "<td>" + value.login + "</td>";
+                table += "<td>" + value.name + "</td>";
+                table += "<td>" + value.email + "</td>";
+                table += "<td>";
+                $.each(value.roles, function (index, value) {
+                    table += "<span>" + value.role + " " + "</span>"
+                });
+                table += "</td>";
+                table += "<td>" + "<button class='btn-info btn btn-sm' type='button' data-toggle='modal' data-target='#editUser' id=del" + value.id + ">Edit</button>" + "</td>";
+                table += "<td>" +
+                    "<input type='button' value='Delete' onclick='deleteForm()' id='" + value.id + "' class='delete-user btn btn-danger btn-sm'>"
+                    + "</td>";
+                table += "</tr>";
+            });
+            $("#user-table").append(table)
+        }
     })
 }
 
-function editForm(){
+function deleteForm() {
+    $(".delete-user").click(function (e) {
+        var id = $(this).attr("id");
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            url: "/rest/admin/delete/",
+            data: JSON.stringify({"id": id}),
+            success: function () {
+                $(this).closest("tr").remove();
+                alert("tr remove");
+            }
+        })
+    });
+}
+
+function editForm() {
     var editUser = JSON.stringify({
         "id": $("#id").val(),
         "login": $("#login").val(),
@@ -54,52 +86,29 @@ function editForm(){
         dataType: "json",
         url: "/rest/admin/edit/",
         data: editUser,
-        success: function () {top.location.href="/admin"}
+        success: function () {
+        }
     })
 }
 
-function deleteForm(){
-    var id = $("#deleteId").attr("data-id");
+function addForm() {
+    var newUser = JSON.stringify({
+        "login": $("#newLogin").val(),
+        "password": $("#newPassword").val(),
+        "name": $("#newName").val(),
+        "email": $("#newEmail").val(),
+        "roles": $(".roles:checked").map(function () {
+            return $(this).val();
+        }).get()
+    });
+
     $.ajax({
         type: "POST",
         contentType: "application/json",
         dataType: "json",
-        url: "/rest/admin/delete/"+id,
-        success: function () {}
-})
-}
-
-$(document).ready(function () {
-    $.ajax({
-        type: "GET",
-        contentType: "application/json",
-        dataType: "json",
-        url: "/rest/admin/",
-        cache: false,
-        timeout: 60000,
-        success: function (data) {
-            var table = "";
-            $.each(data,function (key, value) {
-                table += "<tr>";
-                table += '<td>' + value.id + '</td>';
-                table += "<td>" + value.login + "</td>";
-                table += "<td>" + value.name + "</td>";
-                table += "<td>" + value.email + "</td>";
-                table += "<td>"
-                    $.each(value.roles, function (index, value) {
-                        table += "<span>" + value.role + " " + "</span>"
-                    });
-                table += "</td>";
-                table += "<td>" + "<button class='btn-info btn btn-sm' type='button' data-toggle='modal' data-target='#editUser' data-id=" + value.id + ">Edit</button>" + "</td>";
-                table += "<td>" +
-                    // "<form id='deleteForm' action='/admin' method='get'> " +
-                    //     "<button id='deleteId' onclick='deleteForm()' type='submit' class='btn btn-danger btn-sm' data-id="+ value.id +">Delete</button>" +
-                    // "</form>"
-                    "<a href= /rest/admin/delete/" + value.id + " class = 'btn btn-danger btn-sm'>Delete</a>"
-                    + "</td>";
-                table += "</tr>";
-            });
-            $("#user-table").append(table)
+        url: "/rest/admin/add/",
+        data: newUser,
+        success: function () {
         }
     })
-})
+}

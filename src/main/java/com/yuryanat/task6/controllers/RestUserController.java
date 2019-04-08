@@ -5,13 +5,12 @@ import com.yuryanat.task6.models.User;
 import com.yuryanat.task6.services.RoleService;
 import com.yuryanat.task6.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,12 +45,10 @@ public class RestUserController {
         return new ResponseEntity<>("User added", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/rest/admin/delete/{id}")
-    public ResponseEntity restDeleteUserById(@PathVariable("id") int id) throws IOException {
-        userService.deleteUser(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/admin"));
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    @PostMapping(value = "/rest/admin/delete/")
+    public ResponseEntity restDeleteUserById(@RequestBody Map<String,Integer> req) throws IOException {
+        userService.deleteUser(req.entrySet().iterator().next().getValue());
+        return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 
     @PostMapping(value = "/rest/admin/edit")
