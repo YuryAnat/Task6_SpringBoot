@@ -69,7 +69,7 @@
                         </div>
                         <div class="row justify-content-center">
                             <div class="col-6">
-                                <form id="addFormUser" action="">
+                                <form id="addFormUser">
                                     <label>Login</label>
                                     <input id="newLogin" class="form-control" name="login" value="" type="text">
                                     <label>Password</label>
@@ -85,7 +85,7 @@
                                     <input class="roles" id="roleAdmin" type="checkbox" name="roles" value="ADMIN">ADMIN<br>
                                     <div class="row justify-content-center">
                                         <div class="col-5">
-                                            <input class="btn btn-success" type="submit" onclick="addForm()" name="add" value="Add new user">
+                                            <button class="add-user btn btn-success" type="button">Add user</button>
                                         </div>
                                     </div>
                                 </form>
@@ -96,7 +96,7 @@
                 <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="editUser"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <form id="editFormUser" class="form-group" action="">
+                        <form id="editFormUser" class="form-group">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5>Edit user</h5>
@@ -125,8 +125,8 @@
                                     <br>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-success" type="submit" onclick="editForm()" name="edit">Edit user</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button class="edit-button btn btn-success" type="button">Edit user</button>
+                                    <button type="button" class="b-close btn btn-secondary" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </form>

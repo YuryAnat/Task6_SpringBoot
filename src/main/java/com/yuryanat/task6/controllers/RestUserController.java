@@ -42,13 +42,14 @@ public class RestUserController {
         roles.forEach(r -> r.addUser(user));
         user.setRoles(roles);
         userService.addNewUser(user);
-        return new ResponseEntity<>("User added", HttpStatus.OK);
+        return new ResponseEntity<>("{\"Status\" : \"User added\"}", HttpStatus.OK);
     }
 
     @PostMapping(value = "/rest/admin/delete/")
     public ResponseEntity restDeleteUserById(@RequestBody Map<String,Integer> req) throws IOException {
         userService.deleteUser(req.entrySet().iterator().next().getValue());
-        return new ResponseEntity<>("User deleted", HttpStatus.OK);
+        ResponseEntity re = new ResponseEntity<>("{\"Status\" : \"User deleted\"}", HttpStatus.OK);
+        return re;
     }
 
     @PostMapping(value = "/rest/admin/edit")
@@ -57,6 +58,6 @@ public class RestUserController {
 //        roles.forEach(r -> r.addUser(user));
         user.setRoles(roles);
         userService.updateUser(user);
-        return new ResponseEntity<>("User edited", HttpStatus.OK);
+        return new ResponseEntity<>("{\"Status\" : \"User edited\"}", HttpStatus.OK);
     }
 }

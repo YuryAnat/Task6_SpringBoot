@@ -28,6 +28,7 @@ function addAllUser() {
         cache: false,
         timeout: 60000,
         success: function (data) {
+            $("#user-table tr").remove();
             var table = "";
             $.each(data, function (key, value) {
                 table += "<tr>";
@@ -40,9 +41,9 @@ function addAllUser() {
                     table += "<span>" + value.role + " " + "</span>"
                 });
                 table += "</td>";
-                table += "<td>" + "<button class='btn-info btn btn-sm' type='button' data-toggle='modal' data-target='#editUser' id=del" + value.id + ">Edit</button>" + "</td>";
+                table += "<td>" + "<button class='btn-info btn btn-sm' type='button' data-toggle='modal' data-target='#editUser' data-id=" + value.id + ">Edit</button>" + "</td>";
                 table += "<td>" +
-                    "<input type='button' value='Delete' onclick='deleteForm()' id='" + value.id + "' class='delete-user btn btn-danger btn-sm'>"
+                    "<input type='button' value='Delete' id='" + value.id + "' class='delete-user btn btn-danger btn-sm'>"
                     + "</td>";
                 table += "</tr>";
             });
@@ -51,24 +52,21 @@ function addAllUser() {
     })
 }
 
-function deleteForm() {
-    $(".delete-user").click(function (e) {
-        var id = $(this).attr("id");
-        $.ajax({
-            type: "POST",
-            contentType: "application/json",
-            dataType: "json",
-            url: "/rest/admin/delete/",
-            data: JSON.stringify({"id": id}),
-            success: function () {
-                $(this).closest("tr").remove();
-                alert("tr remove");
-            }
-        })
-    });
-}
+$(document).on('click', '.delete-user', function(){
+    var id = $(this).attr("id");
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        dataType: "json",
+        url: "/rest/admin/delete/",
+        data: JSON.stringify({"id": id}),
+        success: function () {
+            addAllUser();
+        }
+    })
+});
 
-function editForm() {
+$(document).on("click",".edit-button", function () {
     var editUser = JSON.stringify({
         "id": $("#id").val(),
         "login": $("#login").val(),
@@ -87,11 +85,13 @@ function editForm() {
         url: "/rest/admin/edit/",
         data: editUser,
         success: function () {
+            addAllUser();
+            $("#editUser .b-close").click();
         }
     })
-}
+});
 
-function addForm() {
+$(document).on("click",".add-user", function () {
     var newUser = JSON.stringify({
         "login": $("#newLogin").val(),
         "password": $("#newPassword").val(),
@@ -109,6 +109,8 @@ function addForm() {
         url: "/rest/admin/add/",
         data: newUser,
         success: function () {
+            addAllUser();
+            $("#listUser").tab("show");
         }
     })
-}
+});
