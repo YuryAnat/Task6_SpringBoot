@@ -6,9 +6,12 @@ import com.yuryanat.task6.services.RoleService;
 import com.yuryanat.task6.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +42,6 @@ public class RestUserController {
     @PostMapping(value = "/rest/admin/add")
     public ResponseEntity<String> restAddNewUser(@RequestBody User user){
         Set<Role> roles = user.getRoles().stream().map(r -> roleService.findRoleByName(r.getRole())).collect(Collectors.toSet());
-        roles.forEach(r -> r.addUser(user));
         user.setRoles(roles);
         userService.addNewUser(user);
         return new ResponseEntity<>("{\"Status\" : \"User added\"}", HttpStatus.OK);
@@ -48,16 +50,22 @@ public class RestUserController {
     @PostMapping(value = "/rest/admin/delete/")
     public ResponseEntity restDeleteUserById(@RequestBody Map<String,Integer> req) throws IOException {
         userService.deleteUser(req.entrySet().iterator().next().getValue());
-        ResponseEntity re = new ResponseEntity<>("{\"Status\" : \"User deleted\"}", HttpStatus.OK);
-        return re;
+        return new ResponseEntity<>("{\"Status\" : \"User deleted\"}", HttpStatus.OK);
     }
 
     @PostMapping(value = "/rest/admin/edit")
     public ResponseEntity<String> restEditUser(@RequestBody User user){
         Set<Role> roles = user.getRoles().stream().map(r -> roleService.findRoleByName(r.getRole())).collect(Collectors.toSet());
-//        roles.forEach(r -> r.addUser(user));
         user.setRoles(roles);
         userService.updateUser(user);
         return new ResponseEntity<>("{\"Status\" : \"User edited\"}", HttpStatus.OK);
+    }
+
+    @PostMapping(value = {"/rest/user/"})
+    public ResponseEntity<String> restUserInfo(Authentication authentication){
+        List<String> roles = authentication.getAuthorities().stream().map(a -> ((GrantedAuthority) a).getAuthority()).collect(Collectors.toList());
+        Principal principal = (Principal) authentication.getPrincipal();
+        String userName = principal.getName();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
