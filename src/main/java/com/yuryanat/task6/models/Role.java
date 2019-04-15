@@ -10,7 +10,7 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
 
     @Column(name = "role")
     private String role;
@@ -22,7 +22,7 @@ public class Role {
     public Role() {
     }
 
-    public Role(int id, String role, Set<User> users) {
+    public Role(Integer id, String role, Set<User> users) {
         this.id = id;
         this.role = role;
         this.users = users;
@@ -42,11 +42,11 @@ public class Role {
         users.add(user);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -8,29 +8,21 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final UserDetailsService userDetailsService;
-    private final SuccessHandler successHandler;
 
     @Autowired
-    public WebSecurityConfiguration(UserDetailsService userDetailsService, SuccessHandler successHandler) {
-        this.userDetailsService = userDetailsService;
-        this.successHandler = successHandler;
-    }
-
-    @Autowired
-    public void registerGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("admin").password(passwordEncoder().encode("admin")).roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("user").password(passwordEncoder().encode("user")).roles("USER");
     }
 
     @Bean
-    public static NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    public static BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -41,12 +33,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/").authenticated();
-        http.authorizeRequests().antMatchers("/admin","/admin/**").access("hasRole('ADMIN')");
-        http.authorizeRequests().antMatchers("/user").access("hasAnyRole('USER','ADMIN')");
-        http.formLogin().loginPage("/login").successHandler(successHandler).permitAll().and().logout().logoutSuccessUrl("/").permitAll()
-                .and().exceptionHandling().accessDeniedPage("/403");
-        http.authorizeRequests().antMatchers("/rest/admin","/rest/admin/**").permitAll();
+        http.httpBasic();
+        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().antMatchers("/rest/admin/","/rest/admin/**").access("hasRole('ADMIN')");
+        http.authorizeRequests().antMatchers("/rest/user/").access("hasAnyRole('USER','ADMIN')");
     }
 }
 

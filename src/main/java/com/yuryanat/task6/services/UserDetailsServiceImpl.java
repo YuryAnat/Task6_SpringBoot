@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserService service;
 
     @Autowired
-    public UserDetailServiceImpl(UserService service) {
+    public UserDetailsServiceImpl(UserService service) {
         this.service = service;
     }
 
